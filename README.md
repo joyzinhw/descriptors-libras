@@ -2,9 +2,7 @@
 
 ## Dataset
 
-[Vowels in Brazilian Sign Language (Libras)
-
-](https://drive.google.com/file/d/1cUfoRwqVL4ooo-bLopgwF5r8GwUhrcQL/view?usp=sharing)
+[Vowels in Brazilian Sign Language (Libras)](https://drive.google.com/file/d/1cUfoRwqVL4ooo-bLopgwF5r8GwUhrcQL/view?usp=sharing)
 
 ## Run Locally
 
