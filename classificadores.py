@@ -8,7 +8,6 @@ from sklearn.metrics import classification_report, accuracy_score, precision_sco
 from tqdm import tqdm
 
 def fisher_score(X, y):
-
     classes = np.unique(y)
     overall_mean = np.mean(X, axis=0)
     numerator = 0
@@ -22,8 +21,8 @@ def fisher_score(X, y):
     fs = np.mean(numerator / (denominator + 1e-8))
     return fs
 
-def treinar_classificadores(X_train_imgs, X_test_imgs, y_train, y_test, extrator, nome_descritor):
-
+def treinar_classificadores(X_train_imgs, X_test_imgs, y_train, y_test, extrator, nome_descritor, nomes_classes=None):
+    # Extrair descritores
     X_train, X_test = [], []
 
     print(f"\n🔹 Extraindo descritores {nome_descritor}...")
@@ -63,5 +62,9 @@ def treinar_classificadores(X_train_imgs, X_test_imgs, y_train, y_test, extrator
 
         print(f"\n📊 {nome_descritor} - {nome_clf}")
         print(f"Acurácia: {acc:.4f}, Precisão: {prec:.4f}, F1-score: {f1:.4f}, Fisher Score: {fs:.4f}")
+
+
+        print("\nResultados para {}:".format(nome_descritor))
+        print(classification_report(y_test, y_pred, target_names=nomes_classes))
 
     return resultados
