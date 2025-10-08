@@ -3,8 +3,8 @@ from descritores import extrair_glcm, extrair_hog, extrair_lbp
 from classificadores import treinar_classificadores
 import traceback
 
-train_path = "dataset/train"
-test_path = "dataset/test"
+train_path = "dataset_reduzido/train"
+test_path = "dataset_reduzido/test"
 
 nomes_classes = ["A", "E", "I", "O", "U"]
 
