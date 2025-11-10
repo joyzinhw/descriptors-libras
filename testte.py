@@ -1,23 +1,53 @@
-import os
+import cv2
+from matplotlib import pyplot as plt
 
-def contar_imagens(path):
-    total = 0
-    por_classe = {}
-    for classe in os.listdir(path):
-        classe_path = os.path.join(path, classe)
-        if not os.path.isdir(classe_path):
-            continue
-        imgs = [f for f in os.listdir(classe_path) if f.lower().endswith(('.png', '.jpg', '.jpeg'))]
-        por_classe[classe] = len(imgs)
-        total += len(imgs)
-    return total, por_classe
+# --- Função segmentar_mao (a mesma que você já tem) ---
+import numpy as np
+from skimage.segmentation import chan_vese
 
-train_total, train_por_classe = contar_imagens("dataset/train")
-test_total, test_por_classe = contar_imagens("dataset/test")
+def segmentar_mao(img, iteracoes=200, mu=0.25):
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    gray = gray / 255.0
+    cv_result = chan_vese(
+        gray,
+        mu=mu,
+        lambda1=1,
+        lambda2=1,
+        tol=1e-3,
+        max_num_iter=iteracoes,
+        dt=0.5,
+        init_level_set="checkerboard",
+        extended_output=True
+    )
+    mask = cv_result[0].astype(np.uint8)
+    result = cv2.bitwise_and(img, img, mask=mask)
+    return result, mask
 
-print(f"Número total de imagens de treino: {train_total}")
-print("Por classe (treino):", train_por_classe)
+# --- Teste em uma única imagem ---
+caminho_img = "exemplo.jpg"  # altere para o caminho da sua imagem
+img = cv2.imread(caminho_img)
 
-print(f"Número total de imagens de teste: {test_total}")
-print("Por classe (teste):", test_por_classe)
+if img is None:
+    raise FileNotFoundError("Não foi possível carregar a imagem!")
 
+resultado, mascara = segmentar_mao(img)
+
+# --- Exibir resultados ---
+plt.figure(figsize=(12,4))
+plt.subplot(1,3,1)
+plt.title("Imagem original")
+plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+plt.axis("off")
+
+plt.subplot(1,3,2)
+plt.title("Máscara Chan-Vese")
+plt.imshow(mascara, cmap="gray")
+plt.axis("off")
+
+plt.subplot(1,3,3)
+plt.title("Segmentação aplicada")
+plt.imshow(cv2.cvtColor(resultado, cv2.COLOR_BGR2RGB))
+plt.axis("off")
+
+plt.show()
+ 

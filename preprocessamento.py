@@ -36,7 +36,6 @@ def carregar_imagens(base_path):
             gray = cv2.cvtColor(result, cv2.COLOR_BGR2GRAY)
             x, y, w, h = cv2.boundingRect(mask)
             crop = gray[y:y+h, x:x+w]
-            crop = cv2.resize(crop, (128, 128))
             crop = cv2.equalizeHist(crop)
             crop = cv2.GaussianBlur(crop, (3, 3), 0)
             imagens.append(crop)
